@@ -40,7 +40,7 @@ namespace Computing_Project_2024
     }
 
 
-    class Team { 
+    public class Team { 
         List<Player> players = [];
         public Team(List<Player> players)
         {
