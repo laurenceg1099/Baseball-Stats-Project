@@ -21,7 +21,7 @@ namespace Computing_Project_2024
 
     }
 
-    class Batter : Player
+    public class Batter : Player
     {
         // statline (ab,Home_runs,k%,bb%,avg,slg,onbase,ops,woba)
         public Batter(string firstName, string lastName, float[] Statline) : base(firstName, lastName, Statline)
@@ -30,7 +30,7 @@ namespace Computing_Project_2024
         }
     }
 
-    class Pitcher : Player
+    public class Pitcher : Player
     {
         // statline (pa,k%,bb%,avg,slg,obp,ops,era,woba,whiff%,swing%)
         public Pitcher(string firstName, string lastName, float[] Statline) : base(firstName, lastName, Statline)
@@ -40,11 +40,18 @@ namespace Computing_Project_2024
     }
 
 
-    public class Team { 
-        List<Player> players = [];
-        public Team(List<Player> players)
+    public class Team 
+    { 
+       
+
+        public string Name;
+        public List<int> Batters;
+        public List <int> Pitchers;
+        public Team(string name, List<int> batters , List<int> pitchers )
         {
-            this.players = players;
+            Name = name;  
+            Batters = batters;
+            Pitchers = pitchers;
         }   
     }
             

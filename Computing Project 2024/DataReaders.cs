@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.IO.Enumeration;
 
 namespace Computing_Project_2024
 {
@@ -29,44 +30,54 @@ namespace Computing_Project_2024
         }
 
 
-        static public List<Team> CreateTeams() 
+        //doc format = teamname_type 
+        static public List<Team> CreateTeams()
         {
-            foreach (string file in Directory.EnumerateFiles(dataDir, "*"))
+            var teams = new List<Team>();
+            foreach (string team in GetTeamNames())
             {
-                Console.WriteLine(file);
-                string lines = File.ReadAllText(file);
-                
+                var battersFile = $"{dataDir}\\{team}_b.csv";
+                var pitchersFile = $"{dataDir}\\{team}_p.csv";
+                var pitchers = File.ReadAllLines(pitchersFile).Cast<int>().ToList();
+                var batters = File.ReadAllLines(battersFile).Cast<int>().ToList();
+                teams.Add(new Team(team,pitchers,batters));
+                    
             }
-
-            return new List<Team>();
+            return teams;
         }
 
-
-        static public List<Player> ReadBatters()
+        private static IEnumerable<string> GetTeamNames()
         {
-            List<Player> list = new List<Player>();
-            var lines = File.ReadAllLines(data);
+            var files = Directory.GetFiles(dataDir, "*");
+
+            return files.Select(x => x.Split("_").First()).Distinct();
+        }
+
+        static public List<Batter> ReadBatters(string file)
+        {
+            List<Batter> list = new List<Batter>();
+            var lines = File.ReadAllLines(file);
             {
                 foreach( var line in lines.Skip(1) ) 
                 {
                     var temp = line.Split(",");   
                     var fields = temp.Select(x => x.Trim('"')).ToArray();
-                    list.Add(new Player(fields[1].Trim(), fields[0].Trim(), fields[4..].Select(x => float.Parse(x)).ToArray())); 
+                    list.Add(new Batter(fields[1].Trim(), fields[0].Trim(), fields[4..].Select(x => float.Parse(x)).ToArray())); 
                 }
             }
             return list;
         }
 
-        static public List<Player> ReadPitchers()
+        static public List<Pitcher> ReadPitchers(string file)
         {
-            List<Player> list = new List<Player>();
-            var lines = File.ReadAllLines(data);
+            List<Pitcher> list = new List<Pitcher>();
+            var lines = File.ReadAllLines(file);
             {
                 foreach (var line in lines.Skip(1))
                 {
                     var temp = line.Split(",");
                     var fields = temp.Select(x => x.Trim('"')).ToArray();
-                    list.Add(new Player(fields[1].Trim(), fields[0].Trim(), fields[4..].Select(x => float.Parse(x)).ToArray()));
+                    list.Add(new Pitcher(fields[1].Trim(), fields[0].Trim(), fields[4..].Select(x => float.Parse(x)).ToArray()));
                 }
             }
             return list;
