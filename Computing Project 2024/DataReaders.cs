@@ -12,7 +12,7 @@ namespace Computing_Project_2024
     {
 
         private const string dataDir = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Data";
-        private static string data => Path.Combine(dataDir, "Battingstats1.csv");
+        private static string data => Path.Combine(dataDir,"Battingstats1.csv");
 
        
         static public List<Player> ReadPlayers()
@@ -36,12 +36,12 @@ namespace Computing_Project_2024
             var teams = new List<Team>();
             foreach (string team in GetTeamNames())
             {
-                var battersFile = $"{dataDir}\\{team}_b.csv";
-                var pitchersFile = $"{dataDir}\\{team}_p.csv";
-                var pitchers = File.ReadAllLines(pitchersFile).Cast<int>().ToList();
-                var batters = File.ReadAllLines(battersFile).Cast<int>().ToList();
+                var battersFile = Path.Combine(dataDir, $"{team}_b.csv");
+                var pitchersFile = Path.Combine(dataDir, $"{team}_p.csv");
+                var pitchers = File.ReadAllLines(pitchersFile).Select(x => int.Parse(x.Split(",")[2])).ToList();
+                var batters = File.ReadAllLines(battersFile).Select(x => int.Parse(x.Split(",")[2])).ToList();
                 teams.Add(new Team(team,pitchers,batters));
-                    
+
             }
             return teams;
         }
