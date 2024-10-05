@@ -42,8 +42,6 @@ namespace Computing_Project_2024
 
     public class Team 
     { 
-       
-
         public string Name;
         public List<int> Batters;
         public List <int> Pitchers;

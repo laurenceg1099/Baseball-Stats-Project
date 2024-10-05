@@ -61,9 +61,9 @@ namespace Computing_Project_2024
             outs = 0;
             while (outs < 3)
             {
-                //bases.SetAtPlate = batting.nextbatter();
+                //bases.SetAtPlate(batting.nextbatter());
                 //int result = AtBat.New(bases.GetAtPlate, pitching.pitcher);
-                int result = 0;
+               var result = 0;
                 switch (result)
                 {
                     case 0: outs++; bases.SetAtPlate(null); break;
@@ -87,13 +87,12 @@ namespace Computing_Project_2024
             var hit = false;
             while (strikes < 3 && hit == false && balls < 4)
             {
-                //var outcome = Pitchball(strikes, balls, batter, pitcher);
-                var outcome = "k";
+                var outcome = Pitch.Pitchball(strikes, balls, batter, pitcher);
                 switch (outcome) //k,b,1,2,3,4
                 {
-                    case "k": strikes++; break;
-                    case "B": balls++; break;
-                    default: return int.Parse(outcome); break;
+                    case 'k': strikes++; break;
+                    case 'B': balls++; break;
+                    default: return (int) outcome; break;
                 }
             }
 
@@ -103,74 +102,6 @@ namespace Computing_Project_2024
             throw new Exception("unexpected outcome");
                 
         }  
-    }
-
-
-    public class Bases
-    {
-        public static event Action<Team> IncreaseScore; 
-
-        private Player[] bases = new Player[4];
-
-        //[1,2,3]
-        private Team team;
-        public Bases(Team team)
-        {
-            this.team = team;
-        }
-        
-        public void advanceRunners(int hits)
-        {
-            Player[] nextbases = new Player[4];
-            for (int i = 0; i < bases.Length; i++)
-            {
-                if (i + hits > 3) IncreaseScore.Invoke(team);
-
-                else nextbases[i + hits] = bases[i];
-            }
-        }
-
-        public void walk(int baseNum)
-        {
-            if (baseNum+1 > 3)
-            {
-                IncreaseScore.Invoke(team);   
-                bases[baseNum] = null;
-                return;
-            }
-   
-
-            if (bases[baseNum+1] != null)
-            {
-                walk(baseNum + 1);
-            }
-            
-            if (bases[baseNum + 1] == null)
-            {
-                bases[baseNum + 1] = bases[baseNum];
-                bases[baseNum] = null;
-                return;
-            }
-
-        }
-
-        public void PrintBases()
-        {
-            var baseout = new StringBuilder();
-            for(int i = 0;i < bases.Length;i++)
-            {
-                if (bases[i] == null) baseout.Append('0');
-                else baseout.Append('1');
-            }
-
-            Console.WriteLine(baseout.ToString());
-        }
-
-        public Player GetAtPlate() { return bases[0]; }
-
-        public void SetAtPlate(Player p ) { bases[0] = p; }
-
-        
     }
 
 }
