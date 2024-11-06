@@ -12,20 +12,18 @@ namespace Computing_Project_2024
     {
 
         private const string dataDir = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Data";
-        private static string data => Path.Combine(dataDir,"Battingstats1.csv");
+        private static string batting_data => Path.Combine(dataDir,"Battingstats1.csv");
 
-       
-        static public List<Player> ReadPlayers()
+
+        static public List<Batter> ReadBatters()
         {
-            List<Player> list = new List<Player>();
-            using (var reader = new StreamReader(data))
-            {
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine().ToString().Split(",");
-                    list.Add(new Player(line[1], line[0], Array.ConvertAll(line[1..-1], x => float.Parse(x))));
-                }
-            }
+            var list = File.ReadLines(batting_data).Skip(1).Select(x => new Batter(x)).ToList();
+            return list;
+        }
+
+        static public List<Pitcher> ReadPitchers()
+        {
+            var list = File.ReadLines(batting_data).Skip(1).Select(x => new Pitcher(x)).ToList();
             return list;
         }
 
@@ -38,8 +36,8 @@ namespace Computing_Project_2024
             {
                 var battersFile = Path.Combine(dataDir, $"{team}_b.csv");
                 var pitchersFile = Path.Combine(dataDir, $"{team}_p.csv");
-                var pitchers = File.ReadAllLines(pitchersFile).Select(x => int.Parse(x.Split(",")[2])).ToList();
-                var batters = File.ReadAllLines(battersFile).Select(x => int.Parse(x.Split(",")[2])).ToList();
+                var pitchers = File.ReadAllLines(pitchersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2])).ToList();
+                var batters = File.ReadAllLines(battersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2])).ToList();
                 teams.Add(new Team(team,pitchers,batters));
 
             }
@@ -60,9 +58,7 @@ namespace Computing_Project_2024
             {
                 foreach( var line in lines.Skip(1) ) 
                 {
-                    var temp = line.Split(",");   
-                    var fields = temp.Select(x => x.Trim('"')).ToArray();
-                    list.Add(new Batter(fields[1].Trim(), fields[0].Trim(), fields[4..].Select(x => float.Parse(x)).ToArray())); 
+                    list.Add(new Batter(line)); 
                 }
             }
             return list;
@@ -75,9 +71,7 @@ namespace Computing_Project_2024
             {
                 foreach (var line in lines.Skip(1))
                 {
-                    var temp = line.Split(",");
-                    var fields = temp.Select(x => x.Trim('"')).ToArray();
-                    list.Add(new Pitcher(fields[1].Trim(), fields[0].Trim(), fields[4..].Select(x => float.Parse(x)).ToArray()));
+                    list.Add(new Pitcher(line));
                 }
             }
             return list;

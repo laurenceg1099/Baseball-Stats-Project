@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +13,13 @@ namespace Computing_Project_2024
         public string FirstName;
         public string LastName ;
         public float[] StatLine;
-       public Player(string firstname , string lastname , float[] Statline)
+       public Player(string data)
         {
-            FirstName = firstname;
-            LastName = lastname;
-            StatLine = Statline;
+            var fields = data.Split(',').Select(x => x.Trim('\"')).ToList();
+            string firstname = fields[1];
+            string lastname = fields[0];
+            int id = int.Parse(fields[2]);
+            float[] statline = fields[3..].Select(x => float.Parse(x)).ToArray();
         }
 
     }
@@ -24,7 +27,7 @@ namespace Computing_Project_2024
     public class Batter : Player
     {
         // statline (ab,Home_runs,k%,bb%,avg,slg,onbase,ops,woba)
-        public Batter(string firstName, string lastName, float[] Statline) : base(firstName, lastName, Statline)
+        public Batter(string data) : base(data)
         {
 
         }
@@ -33,7 +36,7 @@ namespace Computing_Project_2024
     public class Pitcher : Player
     {
         // statline (pa,k%,bb%,avg,slg,obp,ops,era,woba,whiff%,swing%)
-        public Pitcher(string firstName, string lastName, float[] Statline) : base(firstName, lastName, Statline)
+        public Pitcher(string data) : base(data)
         {
 
         }
