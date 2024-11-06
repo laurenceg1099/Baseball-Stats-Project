@@ -6,6 +6,7 @@
         {
             DataReaders.ReadBatters();
             DataReaders.ReadPitchers();
+            var teams = DataReaders.CreateTeams();
         } 
     }
 }

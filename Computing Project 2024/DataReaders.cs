@@ -13,6 +13,7 @@ namespace Computing_Project_2024
     {
 
         private const string dataDir = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Data";
+        private const string TeamDataDir = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Teams";
         private static string batting_data => Path.Combine(dataDir,"BattingStats1.csv");
         private static string pitching_data => Path.Combine(dataDir, "PitchingStats1.csv");
 
@@ -35,10 +36,10 @@ namespace Computing_Project_2024
             var teams = new List<Team>();
             foreach (string team in GetTeamNames())
             {
-                var battersFile = Path.Combine(dataDir, $"{team}_b.csv");
-                var pitchersFile = Path.Combine(dataDir, $"{team}_p.csv");
-                var pitchers = File.ReadAllLines(pitchersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2])).ToList();
-                var batters = File.ReadAllLines(battersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2])).ToList();
+                var battersFile = Path.Combine(TeamDataDir, $"{team}_b.csv");
+                var pitchersFile = Path.Combine(TeamDataDir, $"{team}_p.csv");
+                var pitchers = File.ReadAllLines(pitchersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2].Trim('\"'))).ToList();
+                var batters = File.ReadAllLines(battersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2].Trim('\"'))).ToList();
                 teams.Add(new Team(team,pitchers,batters));
 
             }
@@ -47,7 +48,7 @@ namespace Computing_Project_2024
 
         private static IEnumerable<string> GetTeamNames()
         {
-            var files = Directory.GetFiles(dataDir, "*");
+            var files = Directory.GetFiles(TeamDataDir, "*");
 
             return files.Select(x => x.Split("_").First()).Distinct();
         }
