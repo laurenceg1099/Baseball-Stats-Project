@@ -13,13 +13,14 @@ namespace Computing_Project_2024
         public string FirstName;
         public string LastName ;
         public float[] StatLine;
+        public int Id;
        public Player(string data)
         {
             var fields = data.Split(',').Select(x => x.Trim('\"')).ToList();
-            string firstname = fields[1];
-            string lastname = fields[0];
-            int id = int.Parse(fields[2]);
-            float[] statline = fields[3..].Select(x => float.Parse(x)).ToArray();
+            FirstName = fields[1];
+            LastName = fields[0];
+            Id = int.Parse(fields[2]);
+            StatLine = fields[4..].Select(x => float.Parse(x)).ToArray();
         }
 
     }
@@ -35,7 +36,7 @@ namespace Computing_Project_2024
 
     public class Pitcher : Player
     {
-        // statline (pa,k%,bb%,avg,slg,obp,ops,era,woba,whiff%,swing%)
+        // statline (ab,k%,bb%,avg,slg,obp,ops,era,woba,whiff%,swing%)
         public Pitcher(string data) : base(data)
         {
 

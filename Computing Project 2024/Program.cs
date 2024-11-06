@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            DataReaders.ReadPlayers(); 
+            DataReaders.ReadBatters();
+            DataReaders.ReadPitchers();
         } 
     }
 }

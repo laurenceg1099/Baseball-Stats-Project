@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.IO.Enumeration;
+using System.Runtime.CompilerServices;
 
 namespace Computing_Project_2024
 {
@@ -12,8 +13,8 @@ namespace Computing_Project_2024
     {
 
         private const string dataDir = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Data";
-        private static string batting_data => Path.Combine(dataDir,"Battingstats1.csv");
-
+        private static string batting_data => Path.Combine(dataDir,"BattingStats1.csv");
+        private static string pitching_data => Path.Combine(dataDir, "PitchingStats1.csv");
 
         static public List<Batter> ReadBatters()
         {
@@ -23,7 +24,7 @@ namespace Computing_Project_2024
 
         static public List<Pitcher> ReadPitchers()
         {
-            var list = File.ReadLines(batting_data).Skip(1).Select(x => new Pitcher(x)).ToList();
+            var list = File.ReadLines(pitching_data).Skip(1).Select(x => new Pitcher(x)).ToList();
             return list;
         }
 
