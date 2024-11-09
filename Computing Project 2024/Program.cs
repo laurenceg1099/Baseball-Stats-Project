@@ -4,9 +4,11 @@
     {
         static void Main(string[] args)
         {
-            DataReaders.ReadBatters();
-            DataReaders.ReadPitchers();
+            var batters = DataReaders.ReadBatters();
+            var pitchers = DataReaders.ReadPitchers();
             var teams = DataReaders.CreateTeams();
+            teams[0].GetPitchers(pitchers);
+            teams[0].GetBatters(batters); 
         } 
     }
 }

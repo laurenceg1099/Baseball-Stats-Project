@@ -69,12 +69,25 @@ namespace Computing_Project_2024
         public string Name;
         public List<int> Batters;
         public List <int> Pitchers;
-        public Team(string name, List<int> batters , List<int> pitchers )
+        public Team(string name, List<int> pitchers , List<int> batters )
         {
             Name = name;  
             Batters = batters;
             Pitchers = pitchers;
-        }   
+        }
+
+        
+        public List<Batter> GetBatters(List<Batter> batterstable)
+        {
+            var newlist =  batterstable.Where(x => Batters.Contains(x.Id)).ToList();
+            return newlist;
+        }
+
+        public List<Pitcher> GetPitchers(List<Pitcher> pitcherstable)
+        {
+            var newlist = pitcherstable.Where(x => Pitchers.Contains(x.Id)).ToList();
+            return newlist;
+        }
     }
             
 }

@@ -50,7 +50,8 @@ namespace Computing_Project_2024
         {
             var files = Directory.GetFiles(TeamDataDir, "*");
 
-            return files.Select(x => x.Split("_").First()).Distinct();
+            return files.Select(x => x.Split("_").First()).Distinct().First().Split('\\').TakeLast(1);
+
         }
 
         static public List<Batter> ReadBatters(string file)
