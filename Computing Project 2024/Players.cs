@@ -54,15 +54,15 @@ namespace Computing_Project_2024
         {
             if (StatLine[0] < 250)
             {
-                AbilityScore = -3+0.2*0.5;
+                AbilityScore = -3+0.2*0.5-5;
             }
             else if (StatLine[0] < 350)
             {
-                AbilityScore = (-(3.2 + StatLine[8]) / 2)+(0.2+StatLine[1])/4;
+                AbilityScore = (-(3.2 + StatLine[8]) / 2)+(0.2+StatLine[1])/4 - (5+StatLine[7])/2 ;
             }
             else
             {
-                AbilityScore = -StatLine[8]+StatLine[1]*0.5;
+                AbilityScore = -StatLine[8]+StatLine[1]*0.5-StatLine[7];
             }
         }
     }
