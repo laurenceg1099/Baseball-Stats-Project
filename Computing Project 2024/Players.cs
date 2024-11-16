@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks.Dataflow;
 
 namespace Computing_Project_2024
 {
     public abstract class Player
     {
         public string FirstName;
-        public string LastName ;
+        public string LastName;
         public float[] StatLine;
         public int Id;
-        public float AbilityScore;
-       public Player(string data)
+        public double AbilityScore;
+        public Player(string data)
         {
             var fields = data.Split(',').Select(x => x.Trim('\"')).ToList();
             FirstName = fields[1];
@@ -28,11 +21,11 @@ namespace Computing_Project_2024
 
         public override string ToString()
         {
-            return $"{FirstName},{LastName} ,{Id} ,{StatLine}";
+            return $"{FirstName},{LastName} ,{AbilityScore}";
         }
 
         protected abstract void CalculatetAbilityScore();
-     
+
     }
 
     public class Batter : Player
@@ -45,7 +38,7 @@ namespace Computing_Project_2024
 
         protected override void CalculatetAbilityScore()
         {
-            AbilityScore = StatLine[4];
+            AbilityScore = StatLine[8] * StatLine[1]* Math.Log2(StatLine[0]);
         }
     }
 
@@ -59,35 +52,65 @@ namespace Computing_Project_2024
 
         protected override void CalculatetAbilityScore()
         {
-            AbilityScore = StatLine[2];
+            if (StatLine[0] < 250)
+            {
+                AbilityScore = -3+0.2*0.5;
+            }
+            else if (StatLine[0] < 350)
+            {
+                AbilityScore = (-(3.2 + StatLine[8]) / 2)+(0.2+StatLine[1])/4;
+            }
+            else
+            {
+                AbilityScore = -StatLine[8]+StatLine[1]*0.5;
+            }
         }
     }
 
 
-    public class Team 
-    { 
+    public class Team
+    {
         public string Name;
         public List<int> Batters;
-        public List <int> Pitchers;
-        public Team(string name, List<int> pitchers , List<int> batters )
+        public List<int> Pitchers;
+        public List<Batter> BattingRoster;
+        public List<Pitcher> PitchingRoster;
+        public Team(string name, List<int> pitchers, List<int> batters)
         {
-            Name = name;  
+            Name = name;
             Batters = batters;
             Pitchers = pitchers;
         }
 
-        
-        public List<Batter> GetBatters(List<Batter> batterstable)
+        public void sortPlayers(List<Batter> battersTable, List<Pitcher> pitchersTables)
         {
-            var newlist =  batterstable.Where(x => Batters.Contains(x.Id)).ToList();
+            BattingRoster = SortBatters(battersTable).Take(9).ToList();
+            PitchingRoster = SortPitchers(pitchersTables).Take(13).ToList();
+            foreach (var item in PitchingRoster)
+            {
+                Console.WriteLine($"{item.FirstName} {item.LastName} , {item.AbilityScore}");
+            }
+        }
+        private List<Batter> SortBatters(List<Batter> batterstable)
+        {
+            return GetBatters(batterstable).OrderByDescending(x => x.AbilityScore).ToList();
+        }
+
+        private List<Pitcher> SortPitchers(List<Pitcher> pitcherstable)
+        {
+            return GetPitchers(pitcherstable).OrderByDescending(x => x.AbilityScore).ToList();
+        }
+        private List<Batter> GetBatters(List<Batter> batterstable)
+        {
+            var newlist = batterstable.Where(x => Batters.Contains(x.Id)).ToList();
             return newlist;
         }
 
-        public List<Pitcher> GetPitchers(List<Pitcher> pitcherstable)
+        private List<Pitcher> GetPitchers(List<Pitcher> pitcherstable)
         {
             var newlist = pitcherstable.Where(x => Pitchers.Contains(x.Id)).ToList();
             return newlist;
         }
     }
-            
+
 }
