@@ -49,8 +49,7 @@ namespace Computing_Project_2024
         private static IEnumerable<string> GetTeamNames()
         {
             var files = Directory.GetFiles(TeamDataDir, "*");
-
-            return files.Select(x => x.Split("_").First()).Distinct().First().Split('\\').TakeLast(1);
+            return files.Select(x => x.Split('_').First().Split('\\').Last()).Distinct();
 
         }
 

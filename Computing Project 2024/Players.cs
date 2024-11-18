@@ -86,10 +86,6 @@ namespace Computing_Project_2024
         {
             BattingRoster = SortBatters(battersTable).Take(9).ToList();
             PitchingRoster = SortPitchers(pitchersTables).Take(13).ToList();
-            foreach (var item in PitchingRoster)
-            {
-                Console.WriteLine($"{item.FirstName} {item.LastName} , {item.AbilityScore}");
-            }
         }
         private List<Batter> SortBatters(List<Batter> batterstable)
         {

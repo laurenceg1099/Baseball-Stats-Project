@@ -7,7 +7,15 @@
             var batters = DataReaders.ReadBatters();
             var pitchers = DataReaders.ReadPitchers();
             var teams = DataReaders.CreateTeams();
-            teams[0].sortPlayers(batters, pitchers);
+            var i = 1;
+            foreach (var item in teams)
+            {
+                item.sortPlayers(batters, pitchers);
+                Console.WriteLine($"{i} : {item.Name} , {item.PitchingRoster.Count()},{item.BattingRoster.Count()}");
+                i++;
+            }
+
+            
         } 
     }
 }
