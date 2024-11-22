@@ -21,7 +21,7 @@ namespace Computing_Project_2024
 
         public override string ToString()
         {
-            return $"{FirstName},{LastName} ,{AbilityScore}";
+            return $"{FirstName},{LastName}";
         }
 
         protected abstract void CalculatetAbilityScore();
@@ -75,6 +75,9 @@ namespace Computing_Project_2024
         public List<int> Pitchers;
         public List<Batter> BattingRoster;
         public List<Pitcher> PitchingRoster;
+        private int rosterPos = 0;
+        public Pitcher currentPitcher;
+
         public Team(string name, List<int> pitchers, List<int> batters)
         {
             Name = name;
@@ -86,6 +89,7 @@ namespace Computing_Project_2024
         {
             BattingRoster = SortBatters(battersTable).Take(9).ToList();
             PitchingRoster = SortPitchers(pitchersTables).Take(13).ToList();
+            currentPitcher = PitchingRoster[0]; 
         }
         private List<Batter> SortBatters(List<Batter> batterstable)
         {
@@ -107,6 +111,19 @@ namespace Computing_Project_2024
             var newlist = pitcherstable.Where(x => Pitchers.Contains(x.Id)).ToList();
             return newlist;
         }
+
+        public Player nextbatter()
+        {
+            if (rosterPos > 8)
+            {
+                rosterPos = 0;
+            }
+            var next = BattingRoster[rosterPos];
+            rosterPos++;
+            return next;
+        }
+
+
     }
 
 }

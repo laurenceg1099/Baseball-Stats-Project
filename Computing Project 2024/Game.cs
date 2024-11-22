@@ -61,9 +61,8 @@ namespace Computing_Project_2024
             outs = 0;
             while (outs < 3)
             {
-                //bases.SetAtPlate(batting.nextbatter());
-                //int result = AtBat.New(bases.GetAtPlate, pitching.pitcher);
-               var result = 0;
+                bases.SetAtPlate(batting.nextbatter());
+                int result = AtBat.New((Batter)bases.GetAtPlate(), pitching.currentPitcher);
                 switch (result)
                 {
                     case 0: outs++; bases.SetAtPlate(null); break;
@@ -83,9 +82,8 @@ namespace Computing_Project_2024
         public static int New(Batter batter, Pitcher pitcher)
         {
             var balls = 0;
-            var strikes = 0;
-            var hit = false;
-            while (strikes < 3 && hit == false && balls < 4)
+            var strikes = 0; 
+            while (strikes < 3  && balls < 4)
             {
                 var outcome = Pitch.Pitchball(strikes, balls, batter, pitcher);
                 switch (outcome) //k,b,1,2,3,4

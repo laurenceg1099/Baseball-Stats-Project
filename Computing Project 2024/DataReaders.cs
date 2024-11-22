@@ -33,14 +33,21 @@ namespace Computing_Project_2024
         //doc format = teamname_type 
         static public List<Team> CreateTeams()
         {
+            var bTable = DataReaders.ReadBatters();
+            var pTable = DataReaders.ReadPitchers();
             var teams = new List<Team>();
+
             foreach (string team in GetTeamNames())
             {
                 var battersFile = Path.Combine(TeamDataDir, $"{team}_b.csv");
                 var pitchersFile = Path.Combine(TeamDataDir, $"{team}_p.csv");
                 var pitchers = File.ReadAllLines(pitchersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2].Trim('\"'))).ToList();
                 var batters = File.ReadAllLines(battersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2].Trim('\"'))).ToList();
-                teams.Add(new Team(team,pitchers,batters));
+
+                var newteam = new Team(team, pitchers, batters);
+                newteam.sortPlayers(bTable,pTable);
+                teams.Add(newteam);
+
 
             }
             return teams;
