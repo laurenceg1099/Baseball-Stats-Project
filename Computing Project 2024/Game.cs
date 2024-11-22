@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Sources;
@@ -25,7 +26,9 @@ namespace Computing_Project_2024
             //change team lineups 
             for (int i = 0; i < length; i++)
             {
+              
                var currentinning = new Inning(hometeam,awayteam);
+               Console.WriteLine($"{HomeScore},{AwayScore}");
             }
 
             if (HomeScore == AwayScore)
@@ -52,6 +55,7 @@ namespace Computing_Project_2024
         public Inning(Team home, Team away)
         {
             DoInning(away,home,new Bases(away));
+            Console.WriteLine();
             DoInning(home,away,new Bases(home));    
         }
 
@@ -62,13 +66,16 @@ namespace Computing_Project_2024
             while (outs < 3)
             {
                 bases.SetAtPlate(batting.nextbatter());
-                int result = AtBat.New((Batter)bases.GetAtPlate(), pitching.currentPitcher);
+                var result = AtBat.New((Batter)bases.GetAtPlate(), pitching.currentPitcher);
                 switch (result)
                 {
                     case 0: outs++; bases.SetAtPlate(null); break;
                     case -1: bases.walk(0); break;
                     default: bases.advanceRunners(result); break;
                 }
+                    
+                bases.PrintBases();
+
             }
 
         }
@@ -85,12 +92,12 @@ namespace Computing_Project_2024
             var strikes = 0; 
             while (strikes < 3  && balls < 4)
             {
-                var outcome = Pitch.Pitchball(strikes, balls, batter, pitcher);
+                char outcome = Pitch.Pitchball(strikes, balls, batter, pitcher);
                 switch (outcome) //k,b,1,2,3,4
                 {
                     case 'k': strikes++; break;
-                    case 'B': balls++; break;
-                    default: return (int) outcome; break;
+                    case 'b': balls++; break;
+                    default: return outcome - '0'; 
                 }
             }
 

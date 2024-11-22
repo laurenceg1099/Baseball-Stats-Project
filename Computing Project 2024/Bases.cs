@@ -33,6 +33,8 @@ namespace Computing_Project_2024
 
                 else nextbases[i + hits] = bases[i];
             }
+
+            bases = nextbases;
         }
 
         public void walk(int baseNum)

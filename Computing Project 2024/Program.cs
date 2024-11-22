@@ -8,10 +8,10 @@
             foreach (var item in teams)
             {
                 //Console.WriteLine($"{item.Name} : {item.PitchingRoster.First()},{item.BattingRoster.First()}");
-                Console.WriteLine($"{item.nextbatter()},{item.currentPitcher}");
+                //Console.WriteLine($"{item.nextbatter()},{item.currentPitcher}");
             }
-
             
-        } 
+            new Game(teams[0], teams[1],1);
+        }
     }
 }
