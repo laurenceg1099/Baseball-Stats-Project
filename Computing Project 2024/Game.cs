@@ -22,6 +22,9 @@ namespace Computing_Project_2024
 
         public Game(Team hometeam,Team awayteam,int length) 
         {
+            HomeTeam = hometeam;
+            AwayTeam = awayteam;
+
             Bases.IncreaseScore += Bases_IncreaseScore;
             //change team lineups 
             for (int i = 0; i < length; i++)
