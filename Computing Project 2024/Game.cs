@@ -69,15 +69,16 @@ namespace Computing_Project_2024
             while (outs < 3)
             {
                 bases.SetAtPlate(batting.nextbatter());
+                bases.PrintBases();
                 var result = AtBat.New((Batter)bases.GetAtPlate(), pitching.currentPitcher);
+                Console.WriteLine(result);
                 switch (result)
                 {
                     case 0: outs++; bases.SetAtPlate(null); break;
                     case -1: bases.walk(0); break;
                     default: bases.advanceRunners(result); break;
                 }
-                    
-                bases.PrintBases();
+
 
             }
 

@@ -15,13 +15,14 @@ namespace Computing_Project_2024
             var kx = 1.0;
             if (strikes > balls) 
             {
-                kx = 1.5;
+                kx = 1.25;
             }
 
             else if (strikes < balls)
             {
-                kx = 0.5;
+                kx = 0.75;
             }
+
             var choice = new Random().NextDouble();
 
             if  (choice < 0.15)
@@ -29,7 +30,7 @@ namespace Computing_Project_2024
                 return 'b';
             }
 
-            if (choice < 0.6 * kx)
+            if (choice < 0.7 * kx)
             {
                 return 'k';
             }

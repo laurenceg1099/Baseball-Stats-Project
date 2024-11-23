@@ -29,12 +29,15 @@ namespace Computing_Project_2024
             Player[] nextbases = new Player[4];
             for (int i = 0; i < bases.Length; i++)
             {
-                if (i + hits > 3)
+                if (bases[i] != null && (i + hits > 3))
                 {
+                    Console.WriteLine("++");
                     OnScore(team);
                 }
 
-                else nextbases[i + hits] = bases[i];
+                else if (bases[i] != null ) nextbases[i + hits] = bases[i];
+
+                else continue;
             }
 
             bases = nextbases;
