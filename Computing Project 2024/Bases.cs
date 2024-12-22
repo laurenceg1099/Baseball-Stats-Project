@@ -31,7 +31,6 @@ namespace Computing_Project_2024
             {
                 if (bases[i] != null && (i + hits > 3))
                 {
-                    Console.WriteLine("++");
                     OnScore(team);
                 }
 

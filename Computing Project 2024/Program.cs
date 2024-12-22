@@ -5,13 +5,9 @@
         static void Main(string[] args)
         {
             var teams = DataReaders.CreateTeams();
-            foreach (var item in teams)
-            {
-                //Console.WriteLine($"{item.Name} : {item.PitchingRoster.First()},{item.BattingRoster.First()}");
-                //Console.WriteLine($"{item.nextbatter()},{item.currentPitcher}");
-            }
-            
-            new Game(teams[0], teams[1],1);
+            var game2 = new Game(teams[0], teams[1], 9);
+            Console.WriteLine($"{game2.HomeScore}:{game2.AwayScore}");
+
         }
     }
 }

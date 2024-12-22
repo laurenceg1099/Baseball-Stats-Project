@@ -10,42 +10,65 @@ namespace Computing_Project_2024
 {
     public static class Pitch
     {
+        
         public static char Pitchball(int strikes, int balls , Player pitcher , Player batter) //returns k,b,1,2,3,4
         {
-            var kx = 1.0;
-            if (strikes > balls) 
-            {
-                kx = 1.25;
-            }
+            var random = new  Random();
 
-            else if (strikes < balls)
-            {
-                kx = 0.75;
-            }
+            double pKPercent = pitcher.StatLine[1] / 100.0;
+            double pBBPercent = pitcher.StatLine[2] / 100.0;
+            double PAvg = pitcher.StatLine[3];
+            double bKPercent = batter.StatLine[2] / 100.0;
+            double bAvg = batter.StatLine[4];
 
-            var choice = new Random().NextDouble();
+            var strikechance = pKPercent + bKPercent + 0.05 * strikes;
+            var ballchance = pBBPercent - 0.05 * balls;
+            var hitchance = 0.23*(bAvg + PAvg)/2;
 
-            if  (choice < 0.15)
-            {
-                return 'b';
-            }
+            var total = strikechance + ballchance + hitchance;
+            strikechance /= total;
+            ballchance /= total;
+            hitchance /= total;
 
-            if (choice < 0.7 * kx)
+            var rand = random.NextDouble();
+
+            if (rand < strikechance)
             {
                 return 'k';
             }
 
+            if (rand < ballchance+strikechance) 
+            {
+                return 'b';
+            }
 
             else
             {
-                var choice2 = new Random().NextDouble();
-                if (choice2 < 0.67) return '1';
-                if (choice2 < 0.9) return '2';
-                if (choice2 < 0.95) return '3';
-                else return '4';
+                return HitOutcome(bAvg);
             }
+
+        }
+
+        private static char HitOutcome(double bAvg)
+        {
+            var random = new Random();
+            double randValue = random.NextDouble();
+
+            double singleWeight = 0.55 + bAvg * 0.3; 
+            double doubleWeight = 0.20 + bAvg * 0.2;
+            double tripleWeight = 0.05 + bAvg * 0.1; 
+            double homeRunWeight = 0.05 + bAvg * 0.2;
+            double totalWeight = singleWeight + doubleWeight + tripleWeight + homeRunWeight;
             
-           
+            
+            if (randValue < (singleWeight / totalWeight))
+                return '1'; 
+            if (randValue < (singleWeight + doubleWeight) / totalWeight)
+                return '2'; 
+            if (randValue < (singleWeight + doubleWeight + tripleWeight) / totalWeight)
+                return '3'; 
+            return '4';  
+
         }
 
 

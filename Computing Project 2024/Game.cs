@@ -17,8 +17,8 @@ namespace Computing_Project_2024
         public Team HomeTeam;
         public Team AwayTeam;
 
-        private int HomeScore;
-        private int AwayScore;
+        public int HomeScore;
+        public int AwayScore;
 
         public Game(Team hometeam,Team awayteam,int length) 
         {
@@ -31,7 +31,7 @@ namespace Computing_Project_2024
             {
               
                var currentinning = new Inning(hometeam,awayteam);
-               Console.WriteLine($"{HomeScore},{AwayScore}");
+               //Console.WriteLine($"{HomeScore},{AwayScore}");
             }
 
             if (HomeScore == AwayScore)
@@ -40,6 +40,8 @@ namespace Computing_Project_2024
             }
 
             Bases.IncreaseScore -= Bases_IncreaseScore;
+
+            
         }
 
         private void Bases_IncreaseScore(Team obj)
@@ -58,7 +60,7 @@ namespace Computing_Project_2024
         public Inning(Team home, Team away)
         {
             DoInning(away,home,new Bases(away));
-            Console.WriteLine();
+            //Console.WriteLine();
             DoInning(home,away,new Bases(home));    
         }
 
@@ -69,9 +71,9 @@ namespace Computing_Project_2024
             while (outs < 3)
             {
                 bases.SetAtPlate(batting.nextbatter());
-                bases.PrintBases();
+                //bases.PrintBases();
                 var result = AtBat.New((Batter)bases.GetAtPlate(), pitching.currentPitcher);
-                Console.WriteLine(result);
+                //Console.WriteLine(result);
                 switch (result)
                 {
                     case 0: outs++; bases.SetAtPlate(null); break;
@@ -96,7 +98,8 @@ namespace Computing_Project_2024
             var strikes = 0; 
             while (strikes < 3  && balls < 4)
             {
-                char outcome = Pitch.Pitchball(strikes, balls, batter, pitcher);
+                char outcome = Pitch.Pitchball(strikes, balls, pitcher,batter);
+                //Console.WriteLine(outcome);
                 switch (outcome) //k,b,1,2,3,4
                 {
                     case 'k': strikes++; break;
