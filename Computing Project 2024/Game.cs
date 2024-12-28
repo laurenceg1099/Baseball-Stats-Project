@@ -27,16 +27,20 @@ namespace Computing_Project_2024
 
             Bases.IncreaseScore += Bases_IncreaseScore;
             //change team lineups 
+            
+            var editor = new TeamEditor(AwayTeam);
+            editor.EditTeam();
+
             for (int i = 0; i < length; i++)
             {
               
                var currentinning = new Inning(hometeam,awayteam);
-               //Console.WriteLine($"{HomeScore},{AwayScore}");
+               //Console.WriteLine($"{HomeScore}:{AwayScore}");
             }
 
-            if (HomeScore == AwayScore)
+            while (HomeScore == AwayScore) //extra innings 
             {
-                //do extra innings
+                var currentinning = new Inning(hometeam, awayteam);
             }
 
             Bases.IncreaseScore -= Bases_IncreaseScore;
@@ -57,6 +61,8 @@ namespace Computing_Project_2024
         
         private int outs = 0;
 
+
+
         public Inning(Team home, Team away)
         {
             DoInning(away,home,new Bases(away));
@@ -66,6 +72,7 @@ namespace Computing_Project_2024
 
         private void DoInning(Team batting, Team pitching,Bases bases)
         {
+            checkFatigue(pitching);
            
             outs = 0;
             while (outs < 3)
@@ -86,6 +93,15 @@ namespace Computing_Project_2024
 
         }
 
+        private void checkFatigue(Team pitchingTeam)
+        {
+            int maxFatigue = 75;
+            if(pitchingTeam.currentPitcher.GetFatigue() > maxFatigue)
+            {
+                pitchingTeam.nextPitcher();
+            }
+        }
+
 
         public void Addout() { outs++; }
     }
@@ -98,6 +114,8 @@ namespace Computing_Project_2024
             var strikes = 0; 
             while (strikes < 3  && balls < 4)
             {
+                pitcher.IncreaseFatigue();
+
                 char outcome = Pitch.Pitchball(strikes, balls, pitcher,batter);
                 //Console.WriteLine(outcome);
                 switch (outcome) //k,b,1,2,3,4
@@ -115,5 +133,7 @@ namespace Computing_Project_2024
                 
         }  
     }
+
+    
 
 }
