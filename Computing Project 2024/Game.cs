@@ -27,9 +27,7 @@ namespace Computing_Project_2024
 
             Bases.IncreaseScore += Bases_IncreaseScore;
             //change team lineups 
-            
-            var editor = new TeamEditor(AwayTeam);
-            editor.EditTeam();
+
 
             for (int i = 0; i < length; i++)
             {
