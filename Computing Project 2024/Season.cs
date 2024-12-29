@@ -29,46 +29,73 @@ namespace Computing_Project_2024
 
         private void CreateSchedule()
         {
+            int Divmax = 76/2;
+            int Leaguemax = 66/2;
+            int Intermax = 20 / 2;
+
             var teamDict = new Dictionary<string, string> { { "Orioles", "AL East" }, { "Red-Sox", "AL East" }, { "Yankees", "AL East" }, { "Rays", "AL East" }, { "Blue-Jays", "AL East" }, { "White-Sox", "AL Central" }, { "Guardians", "AL Central" }, { "Tigers", "AL Central" }, { "Royals", "AL Central" }, { "Twins", "AL Central" }, { "Astros", "AL West" }, { "Angels", "AL West" }, { "Athletics", "AL West" }, { "Mariners", "AL West" }, { "Rangers", "AL West" }, { "Braves", "NL East" }, { "Marlins", "NL East" }, { "Mets", "NL East" }, { "Phillies", "NL East" }, { "Nationals", "NL East" }, { "Cubs", "NL Central" }, { "Reds", "NL Central" }, { "Brewers", "NL Central" }, { "Pirates", "NL Central" }, { "Cardinals", "NL Central" }, { "Diamondbacks", "NL West" }, { "Rockies", "NL West" }, { "Dodgers", "NL West" }, { "Padres", "NL West" }, { "Giants", "NL West" } };
             var random = new Random();
             var schedule = new List<Series> { };
+            
             foreach (var hometeam in _teams)
             {
                 int Divisional = 0;
                 int League = 0;
                 int InterLeague = 0;
+    
 
-                foreach (var awayteam in _teams)
+                while (Divisional < Divmax || League < Leaguemax || InterLeague<Intermax)
                 {
-                    if (hometeam == awayteam) continue;
+                    int randomIndex = random.Next(_teams.Count);
+                    var awayteam = _teams[randomIndex];
+
                     teamDict.TryGetValue(hometeam.Name, out var homeDiv); teamDict.TryGetValue(awayteam.Name, out var awayDiv);
-                    if (homeDiv == awayDiv && Divisional < 19)
+                    
+                    if (hometeam == awayteam) continue;
+
+                    else if (homeDiv == awayDiv && Divisional < Divmax)
                     {
                         int games = random.Next(2) == 0 ? 3 : 4;
+                        games = Math.Min(games, Divmax-Divisional);
                         Divisional += games;
                         schedule.Add(new Series(hometeam, awayteam, games));
                     }
 
-                    if (homeDiv.Take(2) == awayDiv.Take(2) && League < 24)
+                    else if (homeDiv.Substring(0,2) == awayDiv.Substring(0, 2) && League < Leaguemax)
                     {
-                        int games = random.Next(2) == 0 ? 3 : 4; ;
-                        Divisional += games;
+                        int games = random.Next(2) == 0 ? 3 : 4;
+                        games = Math.Min(games, Leaguemax - League);
+                        League += games;
                         schedule.Add(new Series(hometeam, awayteam, games));
                     }
-
-                    if (homeDiv.Take(2) != awayDiv.Take(2) && InterLeague < 20)
+                    
+                    else if (homeDiv.Substring(0,2) != awayDiv.Substring(0, 2) && InterLeague < Intermax)
                     {
                         int games = random.Next(2) == 0 ? 2 : 3; ;
-                        Divisional += games;
+                        games = Math.Min(games, Intermax - InterLeague);
+                        InterLeague += games;
                         schedule.Add(new Series(hometeam, awayteam, games));
                     }
+
                 }
+                
+           
+
             }
 
+            Console.WriteLine(schedule.Sum(x => x._Games));
+
             for (int i = 0; i < schedule.Count; i++)
-                (schedule[i], schedule[random.Next(schedule.Count)]) = (schedule[random.Next(schedule.Count)], schedule[i]);
+            {
+                int r = random.Next(schedule.Count);
+                (schedule[i], schedule[r]) = (schedule[r], schedule[i]);
+            }
 
             writeGames(schedule);
+
+            Console.WriteLine(schedule.Sum(x => x._Games));
+
+      
 
         }
 
@@ -79,10 +106,10 @@ namespace Computing_Project_2024
             {
                 foreach (Series s in schedule)
                 {
-                    for (int i = 0; i <= s._Games; i++)
+                    for (int i = 0; i < s._Games; i++)
                     {
-
                         writer.WriteLine($"{s.Hometeam.Name},{s.Awayteam.Name}");
+
                     }
                 }
             }
