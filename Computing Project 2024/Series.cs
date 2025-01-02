@@ -11,6 +11,7 @@ namespace Computing_Project_2024
         public Team Hometeam;
         public Team Awayteam;
         public int _Games;
+        
         public Series(Team hometeam , Team awayteam , int games) 
         {
            Hometeam = hometeam;

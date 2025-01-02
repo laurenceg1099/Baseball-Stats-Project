@@ -24,10 +24,57 @@ namespace Computing_Project_2024
             _team = teams[choice - 1];
 
             CreateSchedule();
+            AssignDays("Schedule.csv");
 
 
         }
 
+        private List<Game> AssignDays(string path)
+        {
+            var lines = File.ReadAllLines(path).ToList();
+            List<Game> result = lines.Select(line =>
+            {
+                var parts = line.Split(',');
+                var team1 = _teams.FirstOrDefault(x => x.Name == parts[0]);
+                var team2 = _teams.FirstOrDefault(x => x.Name == parts[1]);
+                return new Game(team1, team2);
+            }).ToList();
+
+            for(int i=0; i<result.Count; i++)   
+            {
+                var day = 0;
+                
+                while (true)
+                {
+                    var newlist = result.Where(x => x.getDay() == day).ToList();
+                    bool isGame = CheckGame(result[i], newlist);
+                    if (!isGame)
+                    {
+                        result[i].setDay(day);
+                        break;
+                    }
+                    day++;
+                }
+                
+                
+            }
+            Console.WriteLine(result.Where(x=> x.getDay() == 0 ).ToList().Count());
+            Console.WriteLine(result.Max(x=> x.getDay()));
+            return result;
+            
+
+        }
+
+        private bool CheckGame(Game game,List<Game> currentDays)
+        {
+            var prevteams = currentDays.SelectMany(x => new[] { x.HomeTeam, x.AwayTeam }).Cast<Team>().ToList();
+            if (prevteams.Contains(game.HomeTeam) || prevteams.Contains(game.AwayTeam))
+            {
+                return true;
+            }
+
+            return false;
+        }
         private void CreateSchedule()
         {
             int Divmax = 76 / 2;

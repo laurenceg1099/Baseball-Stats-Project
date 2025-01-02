@@ -19,11 +19,26 @@ namespace Computing_Project_2024
 
         public int HomeScore;
         public int AwayScore;
-
-        public Game(Team hometeam,Team awayteam,int length) 
+        private int length = 9;
+        private int _Day = -1;
+        public Game(Team hometeam,Team awayteam) 
         {
             HomeTeam = hometeam;
             AwayTeam = awayteam;
+
+        }
+
+        public void setDay(int day)
+        {
+            _Day = day;
+        }
+        public int getDay()
+        {
+            return _Day;
+        }
+
+        public void playGame()
+        {
 
             Bases.IncreaseScore += Bases_IncreaseScore;
             //change team lineups 
@@ -31,20 +46,19 @@ namespace Computing_Project_2024
 
             for (int i = 0; i < length; i++)
             {
-              
-               var currentinning = new Inning(hometeam,awayteam);
-               //Console.WriteLine($"{HomeScore}:{AwayScore}");
+
+                var currentinning = new Inning(HomeTeam, AwayTeam);
+                //Console.WriteLine($"{HomeScore}:{AwayScore}");
             }
 
             while (HomeScore == AwayScore) //extra innings 
             {
-                var currentinning = new Inning(hometeam, awayteam);
+                var currentinning = new Inning(HomeTeam, AwayTeam);
             }
 
             Bases.IncreaseScore -= Bases_IncreaseScore;
-
-            
         }
+
 
         private void Bases_IncreaseScore(Team obj)
         {
