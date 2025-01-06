@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System.ComponentModel;
+using System.Dynamic;
 
 namespace Computing_Project_2024
 {
@@ -13,6 +14,10 @@ namespace Computing_Project_2024
         private int rosterPos = 0;
         private int pitcherpos = 0;
         public Pitcher currentPitcher;
+        public double WinLoss;
+        public int _wins;
+        public int _losses;
+
 
         public Team(string name, List<int> pitchers, List<int> batters)
         {
@@ -49,8 +54,17 @@ namespace Computing_Project_2024
             return newlist;
         }
 
+        public void win()
+        {
+            _wins++;
+        }
 
+        public void loss() { _losses++; }
         
+        public void CalcRatio()
+        {
+            WinLoss = _wins / _losses;
+        }
 
         public Player nextbatter()
         {

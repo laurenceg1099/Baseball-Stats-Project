@@ -9,6 +9,8 @@ namespace Computing_Project_2024
         public float[] StatLine;
         public int Id;
         public double AbilityScore;
+
+        public int Value;
         public Player(string data)
         {
             var fields = data.Split(',').Select(x => x.Trim('\"')).ToList();
@@ -21,10 +23,15 @@ namespace Computing_Project_2024
 
         public override string ToString()
         {
-            return $"{FirstName},{LastName}";
+            return $"{FirstName},{LastName} : {AbilityScore}";
         }
 
         protected abstract void CalculatetAbilityScore();
+
+        public void CalculateValue()
+        {
+            Value = Math.Max(500000, 1);
+        }
 
     }
 
@@ -34,12 +41,13 @@ namespace Computing_Project_2024
         public Batter(string data) : base(data)
         {
             CalculatetAbilityScore();
+            CalculateValue();
         }
 
         protected override void CalculatetAbilityScore()
         {
-            AbilityScore = StatLine[8] * StatLine[1]* Math.Log2(StatLine[0]);
-        }
+            AbilityScore = 1-0.01*StatLine[2] + StatLine[8] + 0.01 * StatLine[1] + Math.Log2(StatLine[0]); 
+        } 
     }
 
     public class Pitcher : Player
@@ -50,6 +58,7 @@ namespace Computing_Project_2024
         public Pitcher(string data) : base(data)
         {
             CalculatetAbilityScore();
+            CalculateValue();
         }
 
         protected override void CalculatetAbilityScore()

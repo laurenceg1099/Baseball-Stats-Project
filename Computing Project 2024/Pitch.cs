@@ -21,9 +21,9 @@ namespace Computing_Project_2024
             double bKPercent = batter.StatLine[2] / 100.0;
             double bAvg = batter.StatLine[4];
 
-            var strikechance = pKPercent + bKPercent + 0.05 * strikes;
-            var ballchance = pBBPercent - 0.05 * balls;
-            var hitchance = 0.23*(bAvg + PAvg)/2;
+            var strikechance = 0.3 + ((pKPercent + bKPercent)/2 + 0.05 * strikes);
+            var ballchance = 0.3 + (pBBPercent - 0.05 * balls);
+            var hitchance = 0.24*(bAvg + PAvg)/2;
 
             var total = strikechance + ballchance + hitchance;
             strikechance /= total;

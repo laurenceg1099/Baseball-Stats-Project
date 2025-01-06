@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +25,38 @@ namespace Computing_Project_2024
             var choice = Convert.ToInt32(Console.ReadLine());
             _team = teams[choice - 1];
 
-            CreateSchedule();
-            AssignDays("Schedule.csv");
+            CreateSchedule2();
+            var calendar = AssignDays("Schedule.csv");
 
+            //validate(calendar);
+
+            foreach(var game in calendar)
+            {
+                Console.CursorLeft = 0;
+                Console.Write(game.ToString()+"                                 ");
+                game.playGame();
+
+            }
+            Console.WriteLine() ;
+            _teams.ForEach(x => x.CalcRatio());
+            var table = _teams.OrderByDescending(x=> x.WinLoss).ToList();
+            foreach(var team in table)
+            {
+                Console.WriteLine($"{team.Name,-15}{team._wins}-{team._losses}");
+            }
+
+            var sum = 0;
+            List<string> actual = new List<string> { "Dodgers", "Phillies", "Yankees", "Brewers", "Padres", "Guardians", "Orioles", "Braves", "Mets", "Diamondbacks", "Astros", "Royals", "Tigers", "Mariners", "Cardinals", "Cubs", "Twins", "Red-Sox", "Giants", "Rays", "Rangers", "Reds", "Pirates", "Blue-Jays", "Nationals", "Athletics", "Angels", "Marlins", "Rockies", "White-Sox" };
+            for(int i =0; i < table.Count;i++)
+            {
+                var i2 = actual.IndexOf(table[i].Name);
+                sum += (int) Math.Pow((i - i2), 2);
+
+            }
+
+            Console.WriteLine(sum);
+
+            
 
         }
 
@@ -58,8 +89,9 @@ namespace Computing_Project_2024
                 
                 
             }
-            Console.WriteLine(result.Where(x=> x.getDay() == 0 ).ToList().Count());
-            Console.WriteLine(result.Max(x=> x.getDay()));
+            
+            //Console.WriteLine(result.Where(x=> x.getDay() == 0 ).ToList().Count());
+            //Console.WriteLine(result.Max(x=> x.getDay()));
             return result;
             
 
@@ -85,6 +117,11 @@ namespace Computing_Project_2024
             var random = new Random();
             var schedule = new List<Series> { };
 
+            var totalgames = new Dictionary<Team,int> { };
+            foreach(var team in _teams)
+            {
+                totalgames.Add(team,0);
+            }
             foreach (var hometeam in _teams)
             {
                 int Divisional = 0;
@@ -97,35 +134,60 @@ namespace Computing_Project_2024
                     int randomIndex = random.Next(_teams.Count);
                     var awayteam = _teams[randomIndex];
 
-                    teamDict.TryGetValue(hometeam.Name, out var homeDiv); teamDict.TryGetValue(awayteam.Name, out var awayDiv);
+                    teamDict.TryGetValue(hometeam.Name, out var homeDiv); 
+                    teamDict.TryGetValue(awayteam.Name, out var awayDiv);
 
                     if (hometeam == awayteam) continue;
 
-                    else if (homeDiv == awayDiv && Divisional < Divmax)
+                    //if (totalgames.GetValueOrDefault(awayteam) > 162) continue;
+
+                    //var maxGames = Math.Min(162 - totalgames[hometeam], 162 - totalgames[awayteam]);
+                    //if (maxGames <= 0) continue;
+
+                    //var remainingAway = 162 - totalgames[awayteam];
+                    if (homeDiv == awayDiv && Divisional < Divmax)
                     {
                         int games = random.Next(2) == 0 ? 3 : 4;
                         games = Math.Min(games, Divmax - Divisional);
+                        //games = Math.Min(games, maxGames);
                         Divisional += games;
                         schedule.Add(new Series(hometeam, awayteam, games));
+                        //totalgames[awayteam] += games;
+                        //totalgames[hometeam] += games;
+                        //continue;
                     }
 
-                    else if (homeDiv.Substring(0, 2) == awayDiv.Substring(0, 2) && League < Leaguemax)
+                    if (homeDiv.Substring(0, 2) == awayDiv.Substring(0, 2) && League < Leaguemax)
                     {
                         int games = random.Next(2) == 0 ? 3 : 4;
                         games = Math.Min(games, Leaguemax - League);
+                        //games = Math.Min(games, maxGames);
                         League += games;
                         schedule.Add(new Series(hometeam, awayteam, games));
+                        //totalgames[awayteam]+= games;
+                        //totalgames[hometeam] += games;
+                        //continue;
                     }
 
-                    else if (homeDiv.Substring(0, 2) != awayDiv.Substring(0, 2) && InterLeague < Intermax)
+                    if (homeDiv.Substring(0, 2) != awayDiv.Substring(0, 2) && InterLeague < Intermax)
                     {
                         int games = random.Next(2) == 0 ? 2 : 3; ;
                         games = Math.Min(games, Intermax - InterLeague);
+                        //games = Math.Min(games, maxGames);
                         InterLeague += games;
                         schedule.Add(new Series(hometeam, awayteam, games));
+                        //totalgames[awayteam]+= games;
+                        //totalgames[hometeam] += games;
+                        //continue;
                     }
 
+                    //throw new Exception("fuvk");
+
+
+
                 }
+
+                //Console.WriteLine(Divisional + League + InterLeague);
 
 
 
@@ -137,6 +199,97 @@ namespace Computing_Project_2024
 
 
 
+        }
+
+        private void CreateSchedule2()
+        {
+            int Leaguemax = 70; //66
+            int Intermax = 30; //20
+
+            var teamDict = new Dictionary<string, string> { { "Orioles", "AL East" }, { "Red-Sox", "AL East" }, { "Yankees", "AL East" }, { "Rays", "AL East" }, { "Blue-Jays", "AL East" }, { "White-Sox", "AL Central" }, { "Guardians", "AL Central" }, { "Tigers", "AL Central" }, { "Royals", "AL Central" }, { "Twins", "AL Central" }, { "Astros", "AL West" }, { "Angels", "AL West" }, { "Athletics", "AL West" }, { "Mariners", "AL West" }, { "Rangers", "AL West" }, { "Braves", "NL East" }, { "Marlins", "NL East" }, { "Mets", "NL East" }, { "Phillies", "NL East" }, { "Nationals", "NL East" }, { "Cubs", "NL Central" }, { "Reds", "NL Central" }, { "Brewers", "NL Central" }, { "Pirates", "NL Central" }, { "Cardinals", "NL Central" }, { "Diamondbacks", "NL West" }, { "Rockies", "NL West" }, { "Dodgers", "NL West" }, { "Padres", "NL West" }, { "Giants", "NL West" } };
+            var random = new Random();
+            var schedule = new List<Series> { };
+
+            var totalgames = new Dictionary<Team, List<int>> { };
+            foreach (var team in _teams)
+            {
+                totalgames.Add(team, new List<int> {0, 0});
+            }
+            // home,away,div,leuage,inter
+
+            var divs = teamDict.Select(x=> x.Value).Distinct().ToList();
+            foreach(var div in divs)
+            {
+                var divlist = teamDict.Where(x => x.Value == div).Select(x => x.Key).ToList();
+                var teamsindiv = _teams.Where(x=> divlist.Contains(x.Name)).ToList();
+
+                for(int i=0; i<teamsindiv.Count; i++)
+                {
+                    for(int j=i+1 ; j<teamsindiv.Count; j++)
+                    {
+                        var team = teamsindiv[i];
+                        var opponent = teamsindiv[j];
+
+                        if (team != opponent)
+                        {
+                            for (int s = 0; s < 5; s++)
+                            {
+                                bool isHome = s % 2 == 0; 
+                                if (isHome) schedule.Add(new Series(team, opponent,3));
+                                else schedule.Add(new Series(opponent,team,3));
+             
+
+                            }
+
+                            for (int s = 0; s < 2; s++)
+                            {
+                                bool isHome = (s+3) % 2 == 0; 
+                                if (isHome) schedule.Add(new Series(team, opponent, 2));
+                                else schedule.Add(new Series(opponent, team, 2));
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            while (true)
+            {
+                var teamsleft = totalgames.Where(x => x.Value[0] < Leaguemax ||  x.Value[1] < Intermax).ToDictionary(x => x.Key, x => x.Value);
+                if (teamsleft.Count() == 0)
+                {
+                    break;
+                }
+
+                totalgames = teamsleft;
+
+                var hometeam = totalgames.ElementAt(random.Next(totalgames.Count)).Key;
+                var awayteam = totalgames.ElementAt(random.Next(totalgames.Count)).Key;
+
+                if (hometeam == awayteam) continue;
+                teamDict.TryGetValue(hometeam.Name, out var homeDiv);
+                teamDict.TryGetValue(awayteam.Name, out var awayDiv);
+
+                if (homeDiv == awayDiv) continue;
+
+                if (homeDiv.Substring(0, 2) == awayDiv.Substring(0, 2) && teamsleft[hometeam][0] < Leaguemax && teamsleft[awayteam][0] <Leaguemax)
+                {
+
+                }
+
+                if (homeDiv.Substring(0, 2) != awayDiv.Substring(0, 2) && teamsleft[hometeam][1] < Intermax && teamsleft[awayteam][1] < Intermax) 
+                { 
+                
+                
+                }
+
+
+
+            }
+
+            schedule = ShuffleGames(schedule);
+            writeGames(schedule);
+            
         }
 
         private List<Series> ShuffleGames(List<Series> schedule)
@@ -187,5 +340,25 @@ namespace Computing_Project_2024
             }
         }
 
+
+        public void validate(List<Game> calendar)
+        {
+            foreach(Game game in calendar)
+            {
+                if (game.HomeTeam == game.AwayTeam) throw (new Exception("teams are the same "));
+                
+            }
+
+            var teams = calendar.Select(x=>x.HomeTeam).Distinct().ToList();
+
+            foreach (var team in teams)
+            {
+                var h = calendar.Where(x => x.HomeTeam == team).Count();
+                var A = calendar.Where(x => x.AwayTeam == team).Count();
+
+                if (h > 81) throw (new Exception($"home team has more than 81 games {h}"));
+                if (A > 81) throw (new Exception($"Away team has more than 81 games {A}"));
+            }
+        }
     }
 }

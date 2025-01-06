@@ -47,8 +47,7 @@ namespace Computing_Project_2024
                 var newteam = new Team(team, pitchers, batters);
                 newteam.sortPlayers(bTable,pTable);
                 teams.Add(newteam);
-
-
+  
             }
             return teams;
         }

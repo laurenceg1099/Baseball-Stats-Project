@@ -57,6 +57,12 @@ namespace Computing_Project_2024
             }
 
             Bases.IncreaseScore -= Bases_IncreaseScore;
+            if (HomeScore > AwayScore) { HomeTeam.win();AwayTeam.loss(); }
+            else if (HomeScore < AwayScore) { HomeTeam.loss(); AwayTeam.win(); }
+            else
+            {
+                throw new Exception("outcome not expected");
+            }
         }
 
 
@@ -66,6 +72,10 @@ namespace Computing_Project_2024
             else if(obj == AwayTeam) AwayScore++;
         }
 
+        public override string ToString()
+        {
+            return ($"{_Day} : {HomeTeam.Name}-{AwayTeam.Name}");
+        }
     }
 
     public class Inning
@@ -107,7 +117,7 @@ namespace Computing_Project_2024
 
         private void checkFatigue(Team pitchingTeam)
         {
-            int maxFatigue = 75;
+            int maxFatigue = 80;
             if(pitchingTeam.currentPitcher.GetFatigue() > maxFatigue)
             {
                 pitchingTeam.nextPitcher();
@@ -145,6 +155,8 @@ namespace Computing_Project_2024
                 
         }  
     }
+
+    
 
     
 

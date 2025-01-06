@@ -8,6 +8,8 @@
             var teams = DataReaders.CreateTeams();
             var season = new Season(teams);
 
+            
+            
 
         }
     }
