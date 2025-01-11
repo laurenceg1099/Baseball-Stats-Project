@@ -49,7 +49,7 @@ namespace Computing_Project_2024
                 teams.Add(newteam);
   
             }
-            return teams;
+            return teams;   
         }
 
         private static IEnumerable<string> GetTeamNames()

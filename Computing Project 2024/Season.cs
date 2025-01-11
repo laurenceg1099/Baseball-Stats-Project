@@ -28,7 +28,7 @@ namespace Computing_Project_2024
             CreateSchedule2();
             var calendar = AssignDays("Schedule.csv");
 
-            //validate(calendar);
+            validate(calendar);
 
             foreach(var game in calendar)
             {
@@ -203,8 +203,8 @@ namespace Computing_Project_2024
 
         private void CreateSchedule2()
         {
-            int Leaguemax = 70; //66
-            int Intermax = 30; //20
+            int Leaguemax = 66; //66
+            int Intermax = 20; //20
 
             var teamDict = new Dictionary<string, string> { { "Orioles", "AL East" }, { "Red-Sox", "AL East" }, { "Yankees", "AL East" }, { "Rays", "AL East" }, { "Blue-Jays", "AL East" }, { "White-Sox", "AL Central" }, { "Guardians", "AL Central" }, { "Tigers", "AL Central" }, { "Royals", "AL Central" }, { "Twins", "AL Central" }, { "Astros", "AL West" }, { "Angels", "AL West" }, { "Athletics", "AL West" }, { "Mariners", "AL West" }, { "Rangers", "AL West" }, { "Braves", "NL East" }, { "Marlins", "NL East" }, { "Mets", "NL East" }, { "Phillies", "NL East" }, { "Nationals", "NL East" }, { "Cubs", "NL Central" }, { "Reds", "NL Central" }, { "Brewers", "NL Central" }, { "Pirates", "NL Central" }, { "Cardinals", "NL Central" }, { "Diamondbacks", "NL West" }, { "Rockies", "NL West" }, { "Dodgers", "NL West" }, { "Padres", "NL West" }, { "Giants", "NL West" } };
             var random = new Random();
@@ -253,8 +253,11 @@ namespace Computing_Project_2024
                 }
             }
 
+            var count = 0;
             while (true)
             {
+                count++;
+                if (count > 1000) { CreateSchedule2(); return; }
                 var teamsleft = totalgames.Where(x => x.Value[0] < Leaguemax ||  x.Value[1] < Intermax).ToDictionary(x => x.Key, x => x.Value);
                 if (teamsleft.Count() == 0)
                 {
@@ -274,13 +277,22 @@ namespace Computing_Project_2024
 
                 if (homeDiv.Substring(0, 2) == awayDiv.Substring(0, 2) && teamsleft[hometeam][0] < Leaguemax && teamsleft[awayteam][0] <Leaguemax)
                 {
-
+                    var games = random.Next(2) == 0 ? 3 : 4;
+                    var maxgames = Math.Min(Leaguemax - teamsleft[hometeam][0], Leaguemax - teamsleft[awayteam][0]);
+                    games = Math.Min(games, maxgames);
+                    teamsleft[hometeam][0] += games;
+                    teamsleft[awayteam][0] += games;
+                    schedule.Add(new Series(hometeam, awayteam, games));
                 }
 
                 if (homeDiv.Substring(0, 2) != awayDiv.Substring(0, 2) && teamsleft[hometeam][1] < Intermax && teamsleft[awayteam][1] < Intermax) 
-                { 
-                
-                
+                {
+                    var games = random.Next(2) == 0 ? 3 : 4;
+                    var maxgames = Math.Min(Intermax - teamsleft[hometeam][1], Intermax - teamsleft[awayteam][1]);
+                    games = Math.Min(games, maxgames);
+                    teamsleft[hometeam][1] += games;
+                    teamsleft[awayteam][1] += games;
+                    schedule.Add(new Series(hometeam,awayteam,games));
                 }
 
 
@@ -356,8 +368,8 @@ namespace Computing_Project_2024
                 var h = calendar.Where(x => x.HomeTeam == team).Count();
                 var A = calendar.Where(x => x.AwayTeam == team).Count();
 
-                if (h > 81) throw (new Exception($"home team has more than 81 games {h}"));
-                if (A > 81) throw (new Exception($"Away team has more than 81 games {A}"));
+                if (h + A != 162) throw new Exception("Team does not have 162 games");
+
             }
         }
     }
