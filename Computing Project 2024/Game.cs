@@ -82,9 +82,6 @@ namespace Computing_Project_2024
     {
         
         private int outs = 0;
-
-
-
         public Inning(Team home, Team away)
         {
             DoInning(away,home,new Bases(away));
@@ -117,7 +114,7 @@ namespace Computing_Project_2024
 
         private void checkFatigue(Team pitchingTeam)
         {
-            int maxFatigue = 80;
+            int maxFatigue = 90;
             if(pitchingTeam.currentPitcher.GetFatigue() > maxFatigue)
             {
                 pitchingTeam.nextPitcher();
@@ -140,6 +137,7 @@ namespace Computing_Project_2024
 
                 char outcome = Pitch.Pitchball(strikes, balls, pitcher,batter);
                 //Console.WriteLine(outcome);
+
                 switch (outcome) //k,b,1,2,3,4
                 {
                     case 'k': strikes++; break;

@@ -69,5 +69,10 @@ namespace Computing_Project_2024
         {
 
         }
+
+        public void TradePlayers(Team team2)
+        {
+            //Trade newtrade = ProposeTrade();
+        }
     }
 }

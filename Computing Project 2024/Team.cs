@@ -63,7 +63,7 @@ namespace Computing_Project_2024
         
         public void CalcRatio()
         {
-            WinLoss = _wins / _losses;
+             WinLoss = ( double) _wins / _losses;
         }
 
         public Player nextbatter()
@@ -79,16 +79,23 @@ namespace Computing_Project_2024
 
         public void nextPitcher()
         {
-            if (rosterPos > 8)
-            {
-                rosterPos = 0;
-            }
-            var next = PitchingRoster[rosterPos];
-            rosterPos++;
-            currentPitcher = next;
+            currentPitcher = PitchingRoster.Where(x => x.GetFatigue() <= currentPitcher.GetFatigue() ).First();
         }
 
+        public bool CheckCapSpace(List<Player> players1, List<Player> players2)
+        {
+            int totalval = FullBattingRoster.Where(x => !players1.Contains(x)).Select(x => x.Value).Sum(); 
+            totalval += PitchingRoster.Where(x => !players1.Contains(x)).Select(x => x.Value).Sum();  
 
+            if (totalval + players2.Select(x => x.Value).Sum() < 100000000) //replace with salary of all players on highest salary team
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
 }

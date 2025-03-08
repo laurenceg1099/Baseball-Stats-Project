@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Metrics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,47 +19,104 @@ namespace Computing_Project_2024
         public Season(List<Team> teams)
         {
             _teams = teams;
-            for (int i = 0; i < teams.Count; i++)
+
+        }
+
+        public void StartSeaon()
+        {
+            for (int i = 0; i < _teams.Count; i++)
             {
-                Console.WriteLine($"{i + 1} : {teams[i].Name}");
+                Console.WriteLine($"{i + 1} : {_teams[i].Name}");
             }
             Console.WriteLine();
             var choice = Convert.ToInt32(Console.ReadLine());
-            _team = teams[choice - 1];
+            _team = _teams[choice - 1];
 
-            CreateSchedule2();
-            var calendar = AssignDays("Schedule.csv");
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    long startTime = Stopwatch.GetTimestamp();
+            //    CreateSchedule2();
+            //    var time = Stopwatch.GetElapsedTime(startTime).TotalMilliseconds;
+            //    File.AppendAllText("timedata2.csv", $"{time}\n");
+            //}
 
-            validate(calendar);
-
-            foreach(var game in calendar)
+            while (new FileInfo("Schedule.csv").Length != 0 && new FileInfo("Schedule.csv").Length != 40986) //40986
             {
-                Console.CursorLeft = 0;
-                Console.Write(game.ToString()+"                                 ");
+                CreateSchedule2();
+            }
+
+            var calendar = AssignDays("Schedule.csv");
+            validate(calendar); 
+
+            foreach (var game in calendar)
+            {
+                //Console.CursorLeft = 0;
+                //Console.Write(game.ToString() + "                                 ");
                 game.playGame();
 
             }
-            Console.WriteLine() ;
+            Console.WriteLine();
             _teams.ForEach(x => x.CalcRatio());
-            var table = _teams.OrderByDescending(x=> x.WinLoss).ToList();
-            foreach(var team in table)
+            var table = _teams.OrderByDescending(x => x.WinLoss).ToList();
+            foreach (var team in table)
             {
                 Console.WriteLine($"{team.Name,-15}{team._wins}-{team._losses}");
             }
 
             var sum = 0;
-            List<string> actual = new List<string> { "Dodgers", "Phillies", "Yankees", "Brewers", "Padres", "Guardians", "Orioles", "Braves", "Mets", "Diamondbacks", "Astros", "Royals", "Tigers", "Mariners", "Cardinals", "Cubs", "Twins", "Red-Sox", "Giants", "Rays", "Rangers", "Reds", "Pirates", "Blue-Jays", "Nationals", "Athletics", "Angels", "Marlins", "Rockies", "White-Sox" };
-            for(int i =0; i < table.Count;i++)
+            var mlbStandings = new Dictionary<string, int[]>
             {
-                var i2 = actual.IndexOf(table[i].Name);
-                sum += (int) Math.Pow((i - i2), 2);
+                // AL East
+                { "Yankees", new[] { 94, 68 } },
+                { "Orioles", new[] { 91, 71 } },
+                { "Red-Sox", new[] { 81, 81 } },
+                { "Rays", new[] { 80, 82 } },
+                { "Blue-Jays", new[] { 74, 88 } },
 
-            }
+                // AL Central
+                { "Guardians", new[] { 92, 69 } },
+                { "Tigers", new[] { 86, 76 } },
+                { "Royals", new[] { 86, 76 } },
+                { "Twins", new[] { 82, 80 } },
+                { "White-Sox", new[] { 41, 121 } },
 
-            Console.WriteLine(sum);
+                // AL West
+                { "Astros", new[] { 88, 73 } },
+                { "Mariners", new[] { 85, 77 } },
+                { "Rangers", new[] { 78, 84 } },
+                { "Athletics", new[] { 69, 93 } },
+                { "Angels", new[] { 63, 99 } },
 
+                // NL East
+                { "Phillies", new[] { 95, 67 } },
+                { "Braves", new[] { 89, 73 } },
+                { "Mets", new[] { 89, 73 } },
+                { "Nationals", new[] { 71, 91 } },
+                { "Marlins", new[] { 62, 100 } },
+
+                // NL Central
+                { "Brewers", new[] { 93, 69 } },
+                { "Cubs", new[] { 83, 79 } },
+                { "Cardinals", new[] { 83, 79 } },
+                { "Reds", new[] { 77, 85 } },
+                { "Pirates", new[] { 76, 86 } },
+
+                // NL West
+                { "Dodgers", new[] { 98, 64 } },
+                { "Padres", new[] { 93, 69 } },
+                { "Diamondbacks", new[] { 89, 73 } },
+                { "Giants", new[] { 80, 82 } },
+                { "Rockies", new[] { 61, 101 } }
+            };  
+            //var r = mlbStandings.OrderBy(x => Random.Shared.Next()).ToList();
             
-
+            for (int i = 0; i < table.Count; i++)
+            {
+                var i2 = mlbStandings[table[i].Name];
+                sum += Math.Abs(i2[0] - table[i]._wins);
+                sum += Math.Abs(i2[1] - table[i]._losses);
+            }
+            Console.WriteLine(sum);
         }
 
         private List<Game> AssignDays(string path)
@@ -94,6 +153,24 @@ namespace Computing_Project_2024
             //Console.WriteLine(result.Max(x=> x.getDay()));
             return result;
             
+
+        }
+
+        private List<Game> testAssignDays(string path)
+        {
+            var lines = File.ReadAllLines(path).ToList();
+            List<Game> result = lines.Select(line =>
+            {
+                var parts = line.Split(',');
+                var team1 = _teams.FirstOrDefault(x => x.Name == parts[0]);
+                var team2 = _teams.FirstOrDefault(x => x.Name == parts[1]);
+                return new Game(team1, team2);
+            }).ToList();
+
+            return result;
+
+ 
+
 
         }
 
@@ -203,6 +280,8 @@ namespace Computing_Project_2024
 
         private void CreateSchedule2()
         {
+ 
+
             int Leaguemax = 66; //66
             int Intermax = 20; //20
 
@@ -213,9 +292,9 @@ namespace Computing_Project_2024
             var totalgames = new Dictionary<Team, List<int>> { };
             foreach (var team in _teams)
             {
+                //{LeaugeGames,InterLeaugeGames}
                 totalgames.Add(team, new List<int> {0, 0});
             }
-            // home,away,div,leuage,inter
 
             var divs = teamDict.Select(x=> x.Value).Distinct().ToList();
             foreach(var div in divs)
@@ -257,7 +336,10 @@ namespace Computing_Project_2024
             while (true)
             {
                 count++;
-                if (count > 1000) { CreateSchedule2(); return; }
+                if (count > 1000) 
+                {
+                    return; 
+                }
                 var teamsleft = totalgames.Where(x => x.Value[0] < Leaguemax ||  x.Value[1] < Intermax).ToDictionary(x => x.Key, x => x.Value);
                 if (teamsleft.Count() == 0)
                 {
@@ -298,6 +380,7 @@ namespace Computing_Project_2024
 
 
             }
+            
 
             schedule = ShuffleGames(schedule);
             writeGames(schedule);
@@ -353,7 +436,7 @@ namespace Computing_Project_2024
         }
 
 
-        public void validate(List<Game> calendar)
+        private void validate(List<Game> calendar)
         {
             foreach(Game game in calendar)
             {

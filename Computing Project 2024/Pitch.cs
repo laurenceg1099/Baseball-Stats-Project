@@ -21,9 +21,9 @@ namespace Computing_Project_2024
             double bKPercent = batter.StatLine[2] / 100.0;
             double bAvg = batter.StatLine[4];
 
-            var strikechance = 0.3 + ((pKPercent + bKPercent)/2 + 0.05 * strikes);
-            var ballchance = 0.3 + (pBBPercent - 0.05 * balls);
-            var hitchance = 0.24*(bAvg + PAvg)/2;
+            var strikechance = 0.45 + ((pKPercent + bKPercent)/2 + 0.05 * strikes);
+            var ballchance = 0.20 + (pBBPercent - 0.05 * balls);
+            var hitchance = 0.33*(bAvg + PAvg)/2;
 
             var total = strikechance + ballchance + hitchance;
             strikechance /= total;
@@ -54,7 +54,7 @@ namespace Computing_Project_2024
             var random = new Random();
             double randValue = random.NextDouble();
 
-            double singleWeight = 0.55 + bAvg * 0.3; 
+            double singleWeight = 0.5 + bAvg * 0.3; 
             double doubleWeight = 0.20 + bAvg * 0.2;
             double tripleWeight = 0.05 + bAvg * 0.1; 
             double homeRunWeight = 0.05 + bAvg * 0.2;

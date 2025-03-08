@@ -19,13 +19,19 @@ namespace Computing_Project_2024
 
         static public List<Batter> ReadBatters()
         {
-            var list = File.ReadLines(batting_data).Skip(1).Select(x => new Batter(x)).ToList();
+            var list= File.ReadLines(batting_data).Skip(1).Select(x => new Batter(x)).ToList();
+            list = list.OrderByDescending(x => x.AbilityScore).ToList();
+            var newlist = list.Cast<Player>().ToList();
+            list.ForEach(x => x.calcuteRank(newlist));
             return list;
-        }
-
+        }       
+            
         static public List<Pitcher> ReadPitchers()
         {
             var list = File.ReadLines(pitching_data).Skip(1).Select(x => new Pitcher(x)).ToList();
+            list = list.OrderByDescending(x => x.AbilityScore).ToList();
+            var newlist = list.Cast<Player>().ToList();
+            list.ForEach(x => x.calcuteRank(newlist));
             return list;
         }
 
@@ -41,7 +47,9 @@ namespace Computing_Project_2024
             {
                 var battersFile = Path.Combine(TeamDataDir, $"{team}_b.csv");
                 var pitchersFile = Path.Combine(TeamDataDir, $"{team}_p.csv");
+
                 var pitchers = File.ReadAllLines(pitchersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2].Trim('\"'))).ToList();
+
                 var batters = File.ReadAllLines(battersFile).Skip(1).Select(x => int.Parse(x.Split(",")[2].Trim('\"'))).ToList();
 
                 var newteam = new Team(team, pitchers, batters);

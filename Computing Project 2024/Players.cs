@@ -9,6 +9,7 @@ namespace Computing_Project_2024
         public float[] StatLine;
         public int Id;
         public double AbilityScore;
+        public int rank;
 
         public int Value;
         public Player(string data)
@@ -21,17 +22,22 @@ namespace Computing_Project_2024
 
         }
 
+        public void calcuteRank(List<Player> players)
+        {
+            var table = players.OrderByDescending(x => x.AbilityScore).ToList();
+            rank = table.IndexOf(this);
+            CalculateValue();
+        }
+
         public override string ToString()
         {
-            return $"{FirstName},{LastName} : {AbilityScore}";
+            return $"{FirstName},{LastName} : ${Value}";
         }
 
         protected abstract void CalculatetAbilityScore();
 
-        public void CalculateValue()
-        {
-            Value = Math.Max(500000, 1);
-        }
+        protected abstract void CalculateValue();
+    
 
     }
 
@@ -41,13 +47,18 @@ namespace Computing_Project_2024
         public Batter(string data) : base(data)
         {
             CalculatetAbilityScore();
-            CalculateValue();
         }
 
         protected override void CalculatetAbilityScore()
         {
             AbilityScore = 1-0.01*StatLine[2] + StatLine[8] + 0.01 * StatLine[1] + Math.Log2(StatLine[0]); 
         } 
+
+        protected override void CalculateValue()
+        {
+            var v = -1 * Math.Pow(10, 7) * Math.Log(rank + .1) + 5 * Math.Pow(10, 7);
+            Value = Math.Max(500000, (int)v);
+            }
     }
 
     public class Pitcher : Player
@@ -58,7 +69,7 @@ namespace Computing_Project_2024
         public Pitcher(string data) : base(data)
         {
             CalculatetAbilityScore();
-            CalculateValue();
+            Fatigue = 0;
         }
 
         protected override void CalculatetAbilityScore()
@@ -82,6 +93,12 @@ namespace Computing_Project_2024
         public void DecreaseFatigue() { Fatigue--; }
 
         public int GetFatigue() {  return Fatigue; }
+
+        protected override void CalculateValue()
+        {
+            var v = -9*Math.Pow(10,6)*Math.Log(rank+.3)+ 4* Math.Pow(10,7);
+            Value = Math.Max(500000, (int) v);
+        }
     }
 
 }
