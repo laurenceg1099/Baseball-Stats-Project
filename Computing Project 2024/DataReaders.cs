@@ -21,8 +21,6 @@ namespace Computing_Project_2024
         {
             var list= File.ReadLines(batting_data).Skip(1).Select(x => new Batter(x)).ToList();
             list = list.OrderByDescending(x => x.AbilityScore).ToList();
-            var newlist = list.Cast<Player>().ToList();
-            list.ForEach(x => x.calcuteRank(newlist));
             return list;
         }       
             
@@ -30,8 +28,6 @@ namespace Computing_Project_2024
         {
             var list = File.ReadLines(pitching_data).Skip(1).Select(x => new Pitcher(x)).ToList();
             list = list.OrderByDescending(x => x.AbilityScore).ToList();
-            var newlist = list.Cast<Player>().ToList();
-            list.ForEach(x => x.calcuteRank(newlist));
             return list;
         }
 
@@ -55,9 +51,75 @@ namespace Computing_Project_2024
                 var newteam = new Team(team, pitchers, batters);
                 newteam.sortPlayers(bTable,pTable);
                 teams.Add(newteam);
-  
+                
             }
+
+            
+            
+
+            var namesalary = getsalarys();
+            setValues(bTable, pTable,namesalary);
+
             return teams;   
+        }
+
+        private static void setValues(List<Batter> bTable, List<Pitcher> pTable, List<Tuple<string, int>> namesalary)
+        {
+            foreach(var batter in bTable)
+            {
+                var name = $"{batter.FirstName.Trim()} {batter.LastName}";
+                var s = namesalary.Where(x => x.Item1 == name).ToList(); 
+                if (s.Count() == 1)
+                {
+                    batter.setValue(s[0].Item2);
+                }
+                else
+                {
+                    double v = 500000;
+                    var approx = bTable.Where(x => Math.Round(x.AbilityScore, 1) == Math.Round(batter.AbilityScore, 1)).Where(x => x.Value != 0).ToList();
+                    if (approx.Count() >= 1)
+                    {
+                         v = approx.Select(x => x.Value).Average();
+                    }
+                    
+                    batter.setValue((int)v);
+                }
+
+            }
+
+            foreach (var pitcher in pTable)
+            {
+                var name = $"{pitcher.FirstName.Trim()} {pitcher.LastName}";
+                var s = namesalary.Where(x => x.Item1 == name).ToList();
+                if (s.Count() == 1)
+                {
+                    pitcher.setValue(s[0].Item2);
+                }
+                else
+                {
+                    double v = 500000;
+                    var approx = bTable.Where(x => Math.Round(x.AbilityScore, 1) == Math.Round(pitcher.AbilityScore, 1)).Where(x => x.Value != 0).ToList();
+                    if (approx.Count() >= 1)
+                    {
+                        v = approx.Select(x => x.Value).Average();
+                    }
+
+                    pitcher.setValue((int)v);
+                }
+            }
+        }
+
+        private static List<Tuple<string,int>> getsalarys()
+        {
+            var output = new List<Tuple<string, int>>();
+            var path = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Data\NameSalaryData.csv";
+            var salary = File.ReadAllLines(path).Select(x => x.Split(",")).ToList();
+            foreach (var line in salary)
+            {
+                output.Add(new Tuple<string, int>(line[0], int.Parse(line[2])));
+            }
+
+            return output;
         }
 
         private static IEnumerable<string> GetTeamNames()

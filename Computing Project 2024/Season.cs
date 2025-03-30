@@ -11,26 +11,26 @@ using System.Threading.Tasks;
 
 namespace Computing_Project_2024
 {
-    class Season
+    public class Season
     {
         private Team _team;
         private int length = 185;
-        private List<Team> _teams;
+        public List<Team> _teams;
         public Season(List<Team> teams)
         {
             _teams = teams;
 
         }
 
-        public void StartSeaon()
+        public void TestStartSeaon()
         {
-            for (int i = 0; i < _teams.Count; i++)
-            {
-                Console.WriteLine($"{i + 1} : {_teams[i].Name}");
-            }
-            Console.WriteLine();
-            var choice = Convert.ToInt32(Console.ReadLine());
-            _team = _teams[choice - 1];
+            //for (int i = 0; i < _teams.Count; i++)
+            //{
+            //    Console.WriteLine($"{i + 1} : {_teams[i].Name}");
+            //}
+            //Console.WriteLine();
+            //var choice = Convert.ToInt32(Console.ReadLine());
+            //_team = _teams[choice - 1];
 
             //for (int i = 0; i < 100000; i++)
             //{
@@ -454,6 +454,11 @@ namespace Computing_Project_2024
                 if (h + A != 162) throw new Exception("Team does not have 162 games");
 
             }
+        }
+
+        public void setuserTeam(Team team)
+        {
+            _team = team;
         }
     }
 }

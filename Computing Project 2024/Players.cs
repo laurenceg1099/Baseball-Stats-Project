@@ -26,7 +26,6 @@ namespace Computing_Project_2024
         {
             var table = players.OrderByDescending(x => x.AbilityScore).ToList();
             rank = table.IndexOf(this);
-            CalculateValue();
         }
 
         public override string ToString()
@@ -36,7 +35,10 @@ namespace Computing_Project_2024
 
         protected abstract void CalculatetAbilityScore();
 
-        protected abstract void CalculateValue();
+        public void setValue(int value)
+        {
+            Value = value;
+        }
     
 
     }
@@ -54,11 +56,6 @@ namespace Computing_Project_2024
             AbilityScore = 1-0.01*StatLine[2] + StatLine[8] + 0.01 * StatLine[1] + Math.Log2(StatLine[0]); 
         } 
 
-        protected override void CalculateValue()
-        {
-            var v = -1 * Math.Pow(10, 7) * Math.Log(rank + .1) + 5 * Math.Pow(10, 7);
-            Value = Math.Max(500000, (int)v);
-            }
     }
 
     public class Pitcher : Player
@@ -94,11 +91,6 @@ namespace Computing_Project_2024
 
         public int GetFatigue() {  return Fatigue; }
 
-        protected override void CalculateValue()
-        {
-            var v = -9*Math.Pow(10,6)*Math.Log(rank+.3)+ 4* Math.Pow(10,7);
-            Value = Math.Max(500000, (int) v);
-        }
     }
 
 }

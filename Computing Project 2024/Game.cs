@@ -92,7 +92,7 @@ namespace Computing_Project_2024
         private void DoInning(Team batting, Team pitching,Bases bases)
         {
             checkFatigue(pitching);
-           
+            
             outs = 0;
             while (outs < 3)
             {
