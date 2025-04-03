@@ -64,7 +64,10 @@ namespace GUI
             if (t != null)
             {
                 season.setuserTeam(t);
-
+                HomeScreen newhomescreen = new HomeScreen(season);
+                Hide();
+                newhomescreen.ShowDialog();
+                Show();
             }
 
         }

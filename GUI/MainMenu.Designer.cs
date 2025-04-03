@@ -33,7 +33,8 @@
             // 
             // buttonStartGame
             // 
-            buttonStartGame.Location = new Point(12, 82);
+            buttonStartGame.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            buttonStartGame.Location = new Point(12, 21);
             buttonStartGame.Name = "buttonStartGame";
             buttonStartGame.Size = new Size(121, 41);
             buttonStartGame.TabIndex = 0;
@@ -45,7 +46,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1533, 801);
             Controls.Add(buttonStartGame);
             Name = "MainMenu";
             Text = "MainMenu";

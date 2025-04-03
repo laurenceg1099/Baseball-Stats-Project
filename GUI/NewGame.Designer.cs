@@ -53,6 +53,7 @@
             // 
             // TeamList
             // 
+            TeamList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             TeamList.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             TeamList.GridLines = true;
             TeamList.Location = new Point(12, 43);
@@ -66,7 +67,7 @@
             // 
             // panel1
             // 
-            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(TeamName);
             panel1.Controls.Add(TeamIcon);
@@ -79,7 +80,7 @@
             // 
             // TeamName
             // 
-            TeamName.Anchor = AnchorStyles.None;
+            TeamName.Anchor = AnchorStyles.Top;
             TeamName.AutoSize = true;
             TeamName.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             TeamName.Location = new Point(197, 202);
@@ -100,6 +101,7 @@
             // 
             // PitchingLine
             // 
+            PitchingLine.Anchor = AnchorStyles.Bottom;
             PitchingLine.FormattingEnabled = true;
             PitchingLine.Location = new Point(253, 328);
             PitchingLine.Name = "PitchingLine";

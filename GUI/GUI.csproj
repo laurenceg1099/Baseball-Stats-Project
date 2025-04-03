@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <BaseOutputPath>..\Computing Project 2024\bin</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

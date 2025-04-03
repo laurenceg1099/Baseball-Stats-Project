@@ -13,9 +13,11 @@ namespace Computing_Project_2024
 {
     public class Season
     {
-        private Team _team;
+        public Team _team;
         private int length = 185;
         public List<Team> _teams;
+        public int day = 0;
+        public List<Game> calendar;
         public Season(List<Team> teams)
         {
             _teams = teams;
@@ -119,6 +121,28 @@ namespace Computing_Project_2024
             Console.WriteLine(sum);
         }
 
+        public void startSeason()
+        {
+            if (File.Exists("Schedule.csv")) File.Delete("Schedule.csv");
+            while (Isschedule()) 
+            {
+                CreateSchedule2();
+            }
+
+            calendar = AssignDays("Schedule.csv");
+            validate(calendar);
+            var n = calendar.OrderByDescending(x => x.getDay()).ToList();
+
+
+        }
+
+        private bool Isschedule()
+        {
+            if (!File.Exists("Schedule.csv")) return true;
+            var len = new FileInfo("Schedule.csv").Length;
+            if (len != 40986) return true;
+            else return false;
+        }
         private List<Game> AssignDays(string path)
         {
             var lines = File.ReadAllLines(path).ToList();
@@ -395,7 +419,7 @@ namespace Computing_Project_2024
             while (schedule.Count > 0)
             {
                 var prevteams = result.TakeLast(lookback).SelectMany(x => new[] { x.Hometeam, x.Awayteam }).Cast<Team>().ToList();
-                var available = schedule.Select((series,idx) => new { series, idx }).Where(x => !prevteams.Contains(x.series.Hometeam) && !prevteams.Contains(x.series.Awayteam)).ToList();
+                var available = schedule.Select((series,idx) => new { series, idx }).Where(x => !prevteams.Contains(x.series.Hometeam) & !prevteams.Contains(x.series.Awayteam)).ToList();
                 
                 if (available.Count != 0)
                 {

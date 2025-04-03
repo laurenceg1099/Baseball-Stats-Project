@@ -76,6 +76,11 @@ namespace Computing_Project_2024
         {
             return ($"{_Day} : {HomeTeam.Name}-{AwayTeam.Name}");
         }
+
+        public string ToCalendar()
+        {
+            return ($"{HomeTeam.Name} vs {AwayTeam.Name}");
+        }
     }
 
     public class Inning
