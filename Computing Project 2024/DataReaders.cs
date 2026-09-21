@@ -12,8 +12,8 @@ namespace Computing_Project_2024
     public static class DataReaders
     {
 
-        private const string dataDir = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Data";
-        private const string TeamDataDir = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Teams";
+        private static readonly string dataDir = Path.Combine(AppContext.BaseDirectory, "Data");
+        private static readonly string TeamDataDir = Path.Combine(AppContext.BaseDirectory, "Teams");
         private static string batting_data => Path.Combine(dataDir,"BattingStats1.csv");
         private static string pitching_data => Path.Combine(dataDir, "PitchingStats1.csv");
 
@@ -112,7 +112,7 @@ namespace Computing_Project_2024
         private static List<Tuple<string,int>> getsalarys()
         {
             var output = new List<Tuple<string, int>>();
-            var path = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Data\NameSalaryData.csv";
+            var path = Path.Combine(AppContext.BaseDirectory, "Data", "NameSalaryData.csv");
             var salary = File.ReadAllLines(path).Select(x => x.Split(",")).ToList();
             foreach (var line in salary)
             {

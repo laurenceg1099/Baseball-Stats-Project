@@ -8,7 +8,7 @@ namespace Computing_Project_2024
 {
     public class Analysis
     {
-        private string path = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Data\NameSalaryData.csv";
+        private string path = Path.Combine(AppContext.BaseDirectory, "Data", "NameSalaryData.csv");
         private Dictionary<string, int> namesalary = new Dictionary<string, int>();
         private Dictionary<string, double> p_nameability = new Dictionary<string, double>();
         private Dictionary<string, double> b_nameability = new Dictionary<string, double>();
@@ -35,7 +35,7 @@ namespace Computing_Project_2024
             var battersdata = GetSalaryAbility(b_nameability);
             var pitchersdata = GetSalaryAbility(p_nameability);
 
-            var batterpath = @"C:\Users\Laurence\source\repos\Computing Project 2024\Computing Project 2024\Data\pitcherdata.csv";
+            var batterpath = Path.Combine(AppContext.BaseDirectory, "Data", "pitcherdata.csv");
 
             using (StreamWriter writer = new StreamWriter(batterpath))
             {

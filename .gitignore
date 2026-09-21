@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Do not commit full working-folder archives
+/Computing Project 2024.zip
